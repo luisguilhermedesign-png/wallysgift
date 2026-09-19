@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WALYZITO // GAME '26</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --yellow: #FFE600;
+            --cyan: #00F0FF;
+            --green: #00FF66;
+            --bg-color: #121026;
+            --box-bg: #0a0818;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            background-color: var(--bg-color);
+            color: #FFFFFF;
+            height: 100%;
+            width: 100%;
+            font-family: 'Press Start 2P', monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container Principal Ajustado para Telas Mobile */
+        .game-container {
+            width: 100%;
+            max-width: 380px;
+            height: 100%;
+            max-height: 750px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px;
+        }
+
+        /* HUD Superior */
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #000000;
+            border: 2px solid var(--cyan);
+            padding: 10px 12px;
+        }
+
+        .hud-title {
+            font-size: 0.65rem;
+            color: var(--yellow);
+        }
+
+        .hud-counter {
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            color: var(--cyan);
+        }
+
+        /* Palco Principal */
+        .stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 16px 0;
+            position: relative;
+        }
+
+        .frame {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 12px;
+        }
+
+        .frame.active {
+            display: flex;
+        }
+
+        /* Caixa de Diálogo Retro */
+        .dialog-box {
+            width: 100%;
+            background: var(--box-bg);
+            border: 3px solid var(--yellow);
+            padding: 16px 12px;
+            min-height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dialog-text {
+            font-family: 'VT323', monospace;
+            font-size: 1.6rem;
+            line-height: 1.3;
+            color: #FFFFFF;
+            width: 100%;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 6px;
+            height: 1.2rem;
+            background-color: var(--yellow);
+            margin-left: 4px;
+        }
+
+        /* Molduras de Fotos e QR Code */
+        .card {
+            width: 100%;
+            background: var(--box-bg);
+            border: 3px solid var(--green);
+            overflow: hidden;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .card-info {
+            padding: 10px;
+            text-align: left;
+            background: #000000;
+            border-top: 2px solid var(--green);
+        }
+
+        .card-title {
+            font-size: 0.6rem;
+            color: var(--yellow);
+            margin-bottom: 6px;
+        }
+
+        .card-sub {
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            color: #CCCCCC;
+            line-height: 1.3;
+        }
+
+        /* Botões */
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn {
+            width: 100%;
+            background: var(--yellow);
+            color: #000000;
+            border: 3px solid #000000;
+            padding: 16px 10px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .btn:active {
+            opacity: 0.8;
+        }
+
+        .btn.secondary {
+            background: var(--cyan);
+        }
+
+        .btn.spotify {
+            background: var(--green);
+            color: #000000;
+        }
+
+        .icon {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <!-- HUD -->
+        <div class="hud">
+            <div class="hud-title">⭐ WALYZITO</div>
+            <div class="hud-counter">FRAME <span id="frame-num" style="color: var(--yellow);">01</span>/19</div>
+        </div>
+
+        <!-- Telas do Jogo -->
+        <div class="stage">
+
+            <div class="frame active" id="frame-1">
+                <div class="icon">👾</div>
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Eaí, Walyzito... tudo bem?"></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-2">
+                <div class="icon">🎂</div>
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Hoje é seu dia, e eu quero te parabenizar por mais um ano de vida."></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-3">
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Mas também quero te dizer o quanto você é especial pra mim..."></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-4">
+                <div class="icon">✨</div>
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="E como meus dias são muito melhores quando você está neles."></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-5">
+                <div class="icon">🎁</div>
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="E já que o dia é seu, quero te presentear!"></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-6">
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Você aceita esse presente?"></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-7">
+                <div class="icon">🔥</div>
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Prepara as malas: de 20 a 22 de novembro a gente vai juntos pra DunamisCon!"></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-8">
+                <div class="icon">✈️</div>
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Saindo na sexta e voltando no domingo, igualzinho quando fomos ao FHOP."></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-9">
+                <div class="card">
+                    <img src="https://i.ibb.co/60BN9F4B/hotel.jpg" alt="Hotel GoÁtica Aeroporto Congonhas">
+                    <div class="card-info">
+                        <div class="card-title">🏨 GOÁTICA CONGONHAS</div>
+                        <div class="card-sub">
+                            📍 Campo Belo, São Paulo - SP<br>
+                            📅 20 a 22 de Novembro de 2026<br><br>
+                            Nosso canto já tá reservado, só esperando chegarmos.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-10">
+                <div class="icon">😉</div>
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Tá tudo pronto... só faltava você saber. 😉"></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-11">
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Gostou? Esse aqui é o seu ingresso:"></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-12">
+                <div class="card" style="padding: 16px; text-align: center; background: #FFFFFF;">
+                    <img src="https://i.ibb.co/k2yH8yJf/qrcode.png" alt="Ingresso QR Code" style="width: 160px; margin: 0 auto;">
+                    <div style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #000000; margin-top: 10px; text-transform: uppercase;">
+                        TICKET #DUNAMIS-WALY-2026
+                    </div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-13">
+                <div class="icon">📱</div>
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Não printou? Não tem problema, tenho cópias."></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-14">
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Sei que você não é muito bom com palavras, mas eu sou ótimo com elas..."></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-15">
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="E hoje eu tenho duas pra você:"></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-16">
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Amo você."></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-17">
+                <div class="icon">🎈</div>
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="Aproveita seu dia :)"></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-18">
+                <div class="icon">🎶</div>
+                <div class="dialog-box">
+                    <div class="dialog-text" data-text="E ó... essa trilha sonora aqui é pra você:"></div>
+                </div>
+            </div>
+
+            <div class="frame" id="frame-19">
+                <div style="width: 100%;">
+                    <a href="https://open.spotify.com/playlist/05QmqLEMqhJQYouLwGRyJS?si=0d291cc2a3ef41eb&pt=d0a7226d11ac5a070245eeadbcd08d91" target="_blank" style="text-decoration: none;">
+                        <button class="btn spotify">
+                            ▶ OUVIR NO SPOTIFY ❤️
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Ações do Rodapé -->
+        <div class="actions">
+            <button class="btn" id="next-btn" onclick="advanceFrame()">
+                AVANÇAR ▶
+            </button>
+            <button class="btn secondary" id="choice-btn" onclick="advanceFrame()" style="display: none;">
+                COM CERTEZA!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentFrame = 1;
+        const totalFrames = 19;
+        let isTyping = false;
+        let typeTimeout;
+
+        function typeWriter(element, text) {
+            isTyping = true;
+            element.textContent = '';
+            let i = 0;
+            
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent = text.substring(0, i + 1);
+                    element.appendChild(cursor);
+                    i++;
+                    typeTimeout = setTimeout(type, 20);
+                } else {
+                    isTyping = false;
+                }
+            }
+            type();
+        }
+
+        function triggerFrameAnimation(frameNum) {
+            const frameEl = document.getElementById(`frame-${frameNum}`);
+            if (!frameEl) return;
+            const textEl = frameEl.querySelector('.dialog-text');
+            
+            if (textEl) {
+                const fullText = textEl.getAttribute('data-text');
+                if (fullText) {
+                    typeWriter(textEl, fullText);
+                }
+            }
+        }
+
+        function advanceFrame() {
+            if (isTyping) {
+                clearTimeout(typeTimeout);
+                const currentFrameEl = document.getElementById(`frame-${currentFrame}`);
+                const textEl = currentFrameEl.querySelector('.dialog-text');
+                if (textEl) {
+                    textEl.textContent = textEl.getAttribute('data-text');
+                }
+                isTyping = false;
+                return;
+            }
+
+            if (currentFrame < totalFrames) {
+                document.getElementById(`frame-${currentFrame}`).classList.remove('active');
+                
+                currentFrame++;
+                
+                const nextFrameEl = document.getElementById(`frame-${currentFrame}`);
+                nextFrameEl.classList.add('active');
+                
+                document.getElementById('frame-num').innerText = currentFrame < 10 ? `0${currentFrame}` : currentFrame;
+                
+                triggerFrameAnimation(currentFrame);
+
+                const mainBtn = document.getElementById('next-btn');
+                const secondaryBtn = document.getElementById('choice-btn');
+
+                if (currentFrame === 6) {
+                    mainBtn.innerText = 'SIM!';
+                    secondaryBtn.style.display = 'block';
+                } else if (currentFrame === 7) {
+                    mainBtn.innerText = 'AVANÇAR ▶';
+                    secondaryBtn.style.display = 'none';
+                } else if (currentFrame === 19) {
+                    mainBtn.innerText = 'FINALIZAR ✔';
+                    secondaryBtn.style.display = 'none';
+                    mainBtn.onclick = function() {
+                        alert('Partiu DunamisCon 2026!');
+                    };
+                } else {
+                    secondaryBtn.style.display = 'none';
+                }
+            }
+        }
+
+        window.onload = () => {
+            triggerFrameAnimation(1);
+        };
+    </script>
+</body>
+</html>
