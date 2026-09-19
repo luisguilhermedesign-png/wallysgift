@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WALYZITO // GAME '26</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pixel-yellow: #FFE600;
+            --pixel-orange: #FF6600;
+            --pixel-red: #FF2255;
+            --pixel-purple: #8800FF;
+            --pixel-cyan: #00F0FF;
+            --pixel-green: #00FF66;
+            --pixel-dark-blue: #0b0c1b;
+            --pixel-night-sky: #131236;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #0d091a;
+            color: #FFFFFF;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Press Start 2P', monospace;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Fundo Leve Sem Gradientes Pesados */
+        .game-world {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #171238;
+            z-index: 1;
+        }
+
+        /* Lua Pixelada Estática */
+        .pixel-moon {
+            position: absolute;
+            top: 30px;
+            right: 25px;
+            width: 40px;
+            height: 40px;
+            background: var(--pixel-yellow);
+            border-radius: 50%;
+        }
+
+        /* Container Arcade Mobile */
+        .arcade-frame {
+            width: 100%;
+            max-width: 410px;
+            height: 100vh;
+            max-height: 860px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* HUD Superior */
+        .hud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #000;
+            border: 3px solid var(--pixel-cyan);
+            padding: 10px 12px;
+        }
+
+        .hud-title {
+            font-size: 0.7rem;
+            color: var(--pixel-yellow);
+        }
+
+        .hud-score {
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            color: var(--pixel-cyan);
+            letter-spacing: 2px;
+        }
+
+        /* Área Central */
+        .game-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 16px 0;
+            position: relative;
+        }
+
+        .frame {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 16px;
+        }
+
+        .frame.active {
+            display: flex;
+        }
+
+        /* Caixa de Texto Otimizada */
+        .pixel-dialog-box {
+            width: 100%;
+            background: #0d091a;
+            border: 4px solid var(--pixel-yellow);
+            padding: 16px 12px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .typewriter-text {
+            font-family: 'VT323', monospace;
+            font-size: 1.65rem;
+            line-height: 1.3;
+            color: #FFF;
+            width: 100%;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.4rem;
+            background-color: var(--pixel-yellow);
+            margin-left: 4px;
+        }
+
+        /* Molduras de Mídia */
+        .media-card {
+            width: 100%;
+            background: #0d091a;
+            border: 4px solid var(--pixel-green);
+            overflow: hidden;
+        }
+
+        .media-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .hotel-info {
+            padding: 10px;
+            text-align: left;
+            background: #000;
+            border-top: 3px solid var(--pixel-green);
+        }
+
+        .hotel-name {
+            font-size: 0.65rem;
+            color: var(--pixel-yellow);
+            margin-bottom: 6px;
+        }
+
+        .hotel-details {
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            color: #AAA;
+            line-height: 1.3;
+        }
+
+        /* Botões Otimizados */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .btn-arcade-3d {
+            width: 100%;
+            background: var(--pixel-yellow);
+            color: #000;
+            border: 4px solid #000;
+            padding: 16px 10px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .btn-arcade-3d:active {
+            transform: translateY(2px);
+        }
+
+        .btn-arcade-3d.secondary {
+            background: var(--pixel-cyan);
+        }
+
+        .btn-arcade-3d.spotify {
+            background: var(--pixel-green);
+            color: #000;
+        }
+
+        .decor-item {
+            position: absolute;
+            font-size: 1.4rem;
+            top: -30px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cenário Noturno Leve -->
+    <div class="game-world">
+        <div class="pixel-moon"></div>
+    </div>
+
+    <div class="arcade-frame">
+        <!-- HUD Superior -->
+        <div class="hud-header">
+            <div class="hud-title">⭐ WALYZITO</div>
+            <div class="hud-score">FRAME <span id="frame-num" style="color: var(--pixel-yellow);">01</span>/19</div>
+        </div>
+
+        <!-- Palco do Jogo -->
+        <div class="game-screen">
+
+            <!-- Frame 1 -->
+            <div class="frame active" id="frame-1">
+                <div class="decor-item" style="left: 10%;">👾</div>
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Eaí, Walyzito... tudo bem?"></div>
+                </div>
+            </div>
+
+            <!-- Frame 2 -->
+            <div class="frame" id="frame-2">
+                <div class="decor-item" style="right: 10%;">🎂</div>
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Hoje é seu dia, e eu quero te parabenizar por mais um ano de vida."></div>
+                </div>
+            </div>
+
+            <!-- Frame 3 -->
+            <div class="frame" id="frame-3">
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Mas também quero te dizer o quanto você é especial pra mim..."></div>
+                </div>
+            </div>
+
+            <!-- Frame 4 -->
+            <div class="frame" id="frame-4">
+                <div class="decor-item" style="left: 10%;">✨</div>
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="E como meus dias são muito melhores quando você está neles."></div>
+                </div>
+            </div>
+
+            <!-- Frame 5 -->
+            <div class="frame" id="frame-5">
+                <div class="decor-item" style="right: 10%;">🎁</div>
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="E já que o dia é seu, quero te presentear!"></div>
+                </div>
+            </div>
+
+            <!-- Frame 6 -->
+            <div class="frame" id="frame-6">
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Você aceita esse presente?"></div>
+                </div>
+            </div>
+
+            <!-- Frame 7 -->
+            <div class="frame" id="frame-7">
+                <div class="decor-item" style="left: 10%;">🔥</div>
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Prepara as malas: de 20 a 22 de novembro a gente vai juntos pra DunamisCon!"></div>
+                </div>
+            </div>
+
+            <!-- Frame 8 -->
+            <div class="frame" id="frame-8">
+                <div class="decor-item" style="right: 10%;">✈️</div>
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Saindo na sexta e voltando no domingo, igualzinho quando fomos ao FHOP."></div>
+                </div>
+            </div>
+
+            <!-- Frame 9 -->
+            <div class="frame" id="frame-9">
+                <div class="media-card">
+                    <img src="https://i.ibb.co/60BN9F4B/hotel.jpg" alt="Hotel GoÁtica Aeroporto Congonhas">
+                    <div class="hotel-info">
+                        <div class="hotel-name">🏨 GOÁTICA CONGONHAS</div>
+                        <div class="hotel-details">
+                            📍 Campo Belo, São Paulo - SP<br>
+                            📅 20 a 22 de Novembro de 2026<br><br>
+                            Nosso canto já tá reservado, só esperando chegarmos.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frame 10 -->
+            <div class="frame" id="frame-10">
+                <div class="decor-item" style="right: 10%;">😉</div>
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Tá tudo pronto... só faltava você saber. 😉"></div>
+                </div>
+            </div>
+
+            <!-- Frame 11 -->
+            <div class="frame" id="frame-11">
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Gostou? Esse aqui é o seu ingresso:"></div>
+                </div>
+            </div>
+
+            <!-- Frame 12 -->
+            <div class="frame" id="frame-12">
+                <div class="media-card" style="padding: 16px; text-align: center; background: #FFFFFF;">
+                    <img src="https://i.ibb.co/k2yH8yJf/qrcode.png" alt="Ingresso QR Code" style="width: 170px; margin: 0 auto;">
+                    <div style="font-family: 'Press Start 2P'; font-size: 0.55rem; color: #000; margin-top: 10px; text-transform: uppercase;">
+                        TICKET #DUNAMIS-WALY-2026
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frame 13 -->
+            <div class="frame" id="frame-13">
+                <div class="decor-item" style="left: 10%;">📱</div>
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Não printou? Não tem problema, tenho cópias."></div>
+                </div>
+            </div>
+
+            <!-- Frame 14 -->
+            <div class="frame" id="frame-14">
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Sei que você não é muito bom com palavras, mas eu sou ótimo com elas..."></div>
+                </div>
+            </div>
+
+            <!-- Frame 15 -->
+            <div class="frame" id="frame-15">
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="E hoje eu tenho duas pra você:"></div>
+                </div>
+            </div>
+
+            <!-- Frame 16 -->
+            <div class="frame" id="frame-16">
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Amo você."></div>
+                </div>
+            </div>
+
+            <!-- Frame 17 -->
+            <div class="frame" id="frame-17">
+                <div class="decor-item" style="right: 10%;">🎈</div>
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="Aproveita seu dia :)"></div>
+                </div>
+            </div>
+
+            <!-- Frame 18 -->
+            <div class="frame" id="frame-18">
+                <div class="decor-item" style="left: 10%;">🎶</div>
+                <div class="pixel-dialog-box">
+                    <div class="typewriter-text" data-text="E ó... essa trilha sonora aqui é pra você:"></div>
+                </div>
+            </div>
+
+            <!-- Frame 19 -->
+            <div class="frame" id="frame-19">
+                <div style="width: 100%;">
+                    <a href="https://open.spotify.com/playlist/05QmqLEMqhJQYouLwGRyJS?si=0d291cc2a3ef41eb&pt=d0a7226d11ac5a070245eeadbcd08d91" target="_blank" style="text-decoration: none;">
+                        <button class="btn-arcade-3d spotify">
+                            ▶ OUVIR NO SPOTIFY ❤️
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Controles Inferiores -->
+        <div class="controls">
+            <button class="btn-arcade-3d" id="next-btn" onclick="advanceFrame()">
+                AVANÇAR ▶
+            </button>
+            <button class="btn-arcade-3d secondary" id="choice-btn-2" onclick="advanceFrame()" style="display: none;">
+                COM CERTEZA!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentFrame = 1;
+        const totalFrames = 19;
+        let isTyping = false;
+        let typeTimeout;
+
+        function typeWriter(element, text, speed = 25) {
+            isTyping = true;
+            element.innerHTML = '';
+            let i = 0;
+            
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML = text.substring(0, i + 1);
+                    element.appendChild(cursor);
+                    i++;
+                    typeTimeout = setTimeout(type, speed);
+                } else {
+                    isTyping = false;
+                }
+            }
+            type();
+        }
+
+        function triggerFrameAnimation(frameNum) {
+            const frameEl = document.getElementById(`frame-${frameNum}`);
+            if (!frameEl) return;
+            const textEl = frameEl.querySelector('.typewriter-text');
+            
+            if (textEl) {
+                const fullText = textEl.getAttribute('data-text');
+                if (fullText) {
+                    typeWriter(textEl, fullText);
+                }
+            }
+        }
+
+        function advanceFrame() {
+            if (isTyping) {
+                clearTimeout(typeTimeout);
+                const currentFrameEl = document.getElementById(`frame-${currentFrame}`);
+                const textEl = currentFrameEl.querySelector('.typewriter-text');
+                if (textEl) {
+                    textEl.innerHTML = textEl.getAttribute('data-text');
+                }
+                isTyping = false;
+                return;
+            }
+
+            if (currentFrame < totalFrames) {
+                document.getElementById(`frame-${currentFrame}`).classList.remove('active');
+                
+                currentFrame++;
+                
+                const nextFrameEl = document.getElementById(`frame-${currentFrame}`);
+                nextFrameEl.classList.add('active');
+                
+                document.getElementById('frame-num').innerText = currentFrame < 10 ? `0${currentFrame}` : currentFrame;
+                
+                triggerFrameAnimation(currentFrame);
+
+                const mainBtn = document.getElementById('next-btn');
+                const secondaryBtn = document.getElementById('choice-btn-2');
+
+                if (currentFrame === 6) {
+                    mainBtn.innerText = 'SIM!';
+                    secondaryBtn.style.display = 'block';
+                } else if (currentFrame === 7) {
+                    mainBtn.innerText = 'AVANÇAR ▶';
+                    secondaryBtn.style.display = 'none';
+                } else if (currentFrame === 19) {
+                    mainBtn.innerText = 'FINALIZAR ✔';
+                    secondaryBtn.style.display = 'none';
+                    mainBtn.onclick = function() {
+                        alert('Partiu DunamisCon 2026!');
+                    };
+                } else {
+                    secondaryBtn.style.display = 'none';
+                }
+            }
+        }
+
+        window.onload = () => {
+            triggerFrameAnimation(1);
+        };
+    </script>
+</body>
+</html>
