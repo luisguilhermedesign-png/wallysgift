@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <title>WALYZITO</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+        html,body{width:100vw;height:100vh;background:#121026;color:#fff;font-family:monospace;overflow:hidden;position:fixed;top:0;left:0}
+        .c{width:100%;height:100%;max-width:380px;max-height:750px;display:flex;flex-direction:column;justify-content:space-between;padding:4px;margin:auto}
+        .h{display:flex;justify-content:space-between;align-items:center;background:#000;border:2px solid #00F0FF;padding:2px 4px;font-size:0.55rem;flex-shrink:0;line-height:1}
+        .h2{color:#FFE600;letter-spacing:1px}
+        .h1{color:#00F0FF;font-size:1.2rem}
+        .s{flex:0;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;margin:0;position:relative;width:100%}
+        .f{width:100%;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;animation:a .15s ease-out}
+        .f.x{display:flex}
+        @keyframes a{from{opacity:0}to{opacity:1}}
+        .d{width:100%;background:#0a0818;border:3px solid #FFE600;padding:16px 10px;min-height:290px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .t{font-family:monospace;font-size:1.4rem;line-height:1.15;color:#fff;word-break:break-word;white-space:pre-wrap;width:100%;text-align:left;min-height:3rem}
+        .k{display:inline-block;width:5px;height:1rem;background:#FFE600;margin-left:2px;animation:b .6s infinite}
+        @keyframes b{0%,49%{opacity:1}50%,100%{opacity:0}}
+        .i{font-size:1rem;line-height:1}
+        .e{width:100%;flex-shrink:0;display:flex;flex-direction:column;gap:6px;padding-bottom:8px;margin-bottom:28px}
+        .n{width:100%;background:#FFE600;color:#000;border:3px solid #000;padding:16px 8px;font-family:monospace;font-size:0.85rem;text-transform:uppercase;cursor:pointer;letter-spacing:0.5px;-webkit-appearance:none;appearance:none;transition:opacity .1s;font-weight:bold}
+        .n:active{opacity:0.85;transform:scale(0.98)}
+        .n.s2{background:#00F0FF}
+        .n.sp{background:#00FF66}
+        .cd{width:100%;background:#0a0818;border:3px solid #00FF66;overflow:hidden}
+        .cd img{width:100%;height:auto;display:block;background:#000;max-height:260px;object-fit:cover}
+        .ci{padding:8px;text-align:left;background:#000;border-top:2px solid #00FF66}
+        .ct{font-size:0.55rem;color:#FFE600;margin-bottom:4px;letter-spacing:0.5px}
+        .cs{font-family:monospace;font-size:1rem;color:#ccc;line-height:1.2}
+        .qr{padding:16px;text-align:center;background:#fff;border:3px solid #00FF66;width:100%}
+        .qr img{width:140px;height:auto;margin:0 auto;display:block}
+        .ql{font-family:monospace;font-size:0.45rem;color:#000;margin-top:8px;text-transform:uppercase;letter-spacing:0.5px}
+        a{text-decoration:none;color:inherit}
+    </style>
+</head>
+<body>
+    <div class="c">
+        <div class="h">
+            <div class="h2">⭐ WALYZITO</div>
+            <div class="h1">FRAME <span id="fn">01</span>/20</div>
+        </div>
+        <div class="s">
+            <div class="f x" id="f1"><div class="i">👾</div><div class="d"><div class="t" data-text="Eaí, Walyzito..."></div></div></div>
+            <div class="f" id="f2"><div class="i">⏳</div><div class="d"><div class="t" data-text="Seu dia está chegando, mas eu resolvi me antecipar."></div></div></div>
+            <div class="f" id="f3"><div class="i">☕</div><div class="d"><div class="t" data-text="Senti que seria mais legal te entregar isso estando a sós, do que num lugar cheio de gente como sempre."></div></div></div>
+            <div class="f" id="f4"><div class="i">✨</div><div class="d"><div class="t" data-text="Hoje eu quero te dizer o quanto você é especial pra mim..."></div></div></div>
+            <div class="f" id="f5"><div class="i">☀️</div><div class="d"><div class="t" data-text="E como meus dias são muito melhores quando você está neles."></div></div></div>
+            <div class="f" id="f6"><div class="i">🎁</div><div class="d"><div class="t" data-text="E também quero te presentear!"></div></div></div>
+            <div class="f" id="f7"><div class="i">❓</div><div class="d"><div class="t" data-text="Você aceita esse presente?"></div></div></div>
+            <div class="f" id="f8"><div class="i">🔥</div><div class="d"><div class="t" data-text="Prepara as malas: de 20 a 22 de novembro a gente vai juntos pra DunamisCon!"></div></div></div>
+            <div class="f" id="f9"><div class="i">✈️</div><div class="d"><div class="t" data-text="Saindo na sexta e voltando no domingo, igualzinho quando fomos ao FHOP."></div></div></div>
+            <div class="f" id="f10"><div class="cd"><img src="https://i.postimg.cc/t4B8ZSkZ/7b2fad61-5715-481d-bd28-0831a9dd566c.jpg" alt="Hotel"><div class="ci"><div class="ct">🏨 GOÁTICA CONGONHAS</div><div class="cs">📍 Campo Belo, SP<br>📅 20-22 Nov 2026<br><br>Nosso canto já tá reservado, só esperando chegarmos.</div></div></div></div>
+            <div class="f" id="f11"><div class="i">😉</div><div class="d"><div class="t" data-text="Tá tudo pronto... só faltava você saber. 😉"></div></div></div>
+            <div class="f" id="f12"><div class="i">🎫</div><div class="d"><div class="t" data-text="Gostou? Esse aqui é o seu ingresso:"></div></div></div>
+            <div class="f" id="f13"><div class="qr"><img src="https://i.ibb.co/k2yH8yJf/qrcode.png" alt="QR"><div class="ql">TICKET #DUNAMIS-WALY-2026</div></div></div>
+            <div class="f" id="f14"><div class="i">📱</div><div class="d"><div class="t" data-text="Não printou? Não tem problema, tenho cópias."></div></div></div>
+            <div class="f" id="f15"><div class="i">💬</div><div class="d"><div class="t" data-text="Sei que você não é muito bom com palavras, mas eu sou ótimo com elas"></div></div></div>
+            <div class="f" id="f16"><div class="i">✌️</div><div class="d"><div class="t" data-text="E hoje eu tenho duas pra você:"></div></div></div>
+            <div class="f" id="f17"><div class="i">❤️</div><div class="d"><div class="t" data-text="Amo você."></div></div></div>
+            <div class="f" id="f18"><div class="i">🤝</div><div class="d"><div class="t" data-text="Obrigado por ter me conhecido."></div></div></div>
+            <div class="f" id="f19"><div class="i">🎶</div><div class="d"><div class="t" data-text="E ó... essa trilha sonora aqui é pra você:"></div></div></div>
+            <div class="f" id="f20"><a href="https://open.spotify.com/playlist/05QmqLEMqhJQYouLwGRyJS" target="_blank" style="width:100%"><button class="n sp">▶ OUVIR NO SPOTIFY ❤️</button></a></div>
+        </div>
+        <div class="e">
+            <button class="n" id="nb">AVANÇAR ▶</button>
+            <button class="n s2" id="nb2" style="display:none">COM CERTEZA!</button>
+        </div>
+    </div>
+    <script>
+        let cf=1,tf=20,typing=false,tid=null;
+        function tw(el,text){
+            typing=true;el.textContent='';let i=0;
+            function t(){
+                if(i<text.length){
+                    el.textContent=text.substring(0,i+1);
+                    let cur=document.createElement('span');cur.className='k';el.appendChild(cur);i++;
+                    tid=setTimeout(t,40);
+                }else typing=false;
+            }t();
+        }
+        function play(n){
+            let fe=document.getElementById('f'+cf);fe.classList.remove('x');
+            cf=n;
+            let fe2=document.getElementById('f'+cf);fe2.classList.add('x');
+            document.getElementById('fn').textContent=cf<10?'0'+cf:cf;
+            let tel=fe2.querySelector('.t');
+            if(tel&&tel.hasAttribute('data-text'))tw(tel,tel.getAttribute('data-text'));
+            let nb=document.getElementById('nb');let nb2=document.getElementById('nb2');
+            if(cf===7){nb.textContent='SIM!';nb2.style.display='block'}
+            else if(cf===8){nb.textContent='AVANÇAR ▶';nb2.style.display='none'}
+            else if(cf===20){nb.style.display='none';nb2.style.display='none'}
+            else {nb.style.display='block';nb2.style.display='none'}
+        }
+        function next(){
+            if(typing){clearTimeout(tid);let el=document.getElementById('f'+cf).querySelector('.t');if(el&&el.hasAttribute('data-text'))el.textContent=el.getAttribute('data-text');typing=false;return}
+            if(cf<tf)play(cf+1);
+        }
+        document.getElementById('nb').onclick=next;document.getElementById('nb2').onclick=next;
+        let firstText=document.querySelector('#f1 .t');
+        if(firstText)tw(firstText,firstText.getAttribute('data-text'));
+    </script>
+</body>
+</html>
